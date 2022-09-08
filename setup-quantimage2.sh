@@ -91,7 +91,7 @@ fi
 
 echo "Starting Kheops..."
 cd ../quantimage2-kheops
-docker compose up -d
+docker compose $composefiles up -d
 
 echo "Starting Backend..."
 cd ../quantimage2_backend
