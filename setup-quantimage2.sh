@@ -31,13 +31,13 @@ fi
 echo "Cloning the required projects..."
 
 echo "Cloning customized Kheops..."
-git clone https://github.com/medgift/quantimage2-kheops.git
+git clone https://github.com/medgift/quantimage2-kheops.git --config core.autocrlf=true
 
 echo "Cloning QuantImage v2 Backend"
-git clone https://github.com/medgift/quantimage2_backend.git
+git clone https://github.com/medgift/quantimage2_backend.git --config core.autocrlf=true
 
 echo "Cloning QuantImage v2 Frontend"
-git clone https://github.com/medgift/quantimage2-frontend.git
+git clone https://github.com/medgift/quantimage2-frontend.git --config core.autocrlf=true
 
 secretpath="secrets"
 docker pull alpine/openssl
