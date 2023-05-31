@@ -30,6 +30,10 @@ cookies. To avoid issues while testing the platform on `localhost`, please use
 **Firefox** as a browser and disable the **"Enhanced Tracking Protection"** 
 feature for both `localhost` and `keycloak` hosts.
 
+Ensure that the two following urls / ports have disabled enhanced tracking protection:
+- `localhost:3000`
+- `keycloak:8081`
+
 Setting up the QuantImage v2 platform
 ========================================================================
 Open a Terminal in the current directory, and run the following command:
