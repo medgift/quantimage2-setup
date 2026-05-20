@@ -53,19 +53,24 @@ mkdir -p "$ROOT_DIR/quantimage2-data"
 
 echo "Cloning the required projects..."
 
+# Force LF line endings in the cloned repos so shell scripts and config files
+# work inside Linux containers when this is run from Git Bash on Windows.
+# Harmless no-op on Linux/macOS.
+GIT_CLONE_OPTS=(-c core.autocrlf=false -c core.eol=lf)
+
 if [ ! -d "$ROOT_DIR/quantimage2-kheops" ]; then
   echo "Cloning customized Kheops..."
-  git clone https://github.com/medgift/quantimage2-kheops.git "$ROOT_DIR/quantimage2-kheops"
+  git "${GIT_CLONE_OPTS[@]}" clone https://github.com/medgift/quantimage2-kheops.git "$ROOT_DIR/quantimage2-kheops"
 fi
 
 if [ ! -d "$ROOT_DIR/quantimage2_backend" ]; then
   echo "Cloning QuantImage v2 Backend"
-  git clone https://github.com/medgift/quantimage2_backend.git "$ROOT_DIR/quantimage2_backend"
+  git "${GIT_CLONE_OPTS[@]}" clone https://github.com/medgift/quantimage2_backend.git "$ROOT_DIR/quantimage2_backend"
 fi
 
 if [ ! -d "$ROOT_DIR/quantimage2-frontend" ]; then
   echo "Cloning QuantImage v2 Frontend"
-  git clone https://github.com/medgift/quantimage2-frontend.git "$ROOT_DIR/quantimage2-frontend"
+  git "${GIT_CLONE_OPTS[@]}" clone https://github.com/medgift/quantimage2-frontend.git "$ROOT_DIR/quantimage2-frontend"
 fi
 
 secretpath="secrets"
