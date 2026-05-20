@@ -28,16 +28,19 @@ then
   exit 1
 fi
 
+echo "Creating data folder..."
+mkdir quantimage2-data
+
 echo "Cloning the required projects..."
 
 echo "Cloning customized Kheops..."
-git clone https://github.com/medgift/quantimage2-kheops.git --config core.autocrlf=true
+git clone https://github.com/medgift/quantimage2-kheops.git
 
 echo "Cloning QuantImage v2 Backend"
-git clone https://github.com/medgift/quantimage2_backend.git --config core.autocrlf=true
+git clone https://github.com/medgift/quantimage2_backend.git
 
 echo "Cloning QuantImage v2 Frontend"
-git clone https://github.com/medgift/quantimage2-frontend.git --config core.autocrlf=true
+git clone https://github.com/medgift/quantimage2-frontend.git
 
 secretpath="secrets"
 docker pull alpine/openssl
@@ -53,6 +56,9 @@ generate_secrets ${secretpath} ${secretfiles[*]}
 
 echo "Generating secrets for backend services (if necessary)"
 cd ../quantimage2_backend
+
+echo "# Docker volumes mount directory" > .env  
+echo "QUANTIMAGE2_DATA_MOUNT_DIRECTORY=/home/lluis/quantimage2-setup/quantimage2-data" >> .env
 
 secretfiles=("db_root_password" "db_user_password" "keycloak_db_user_password")
 
