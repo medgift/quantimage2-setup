@@ -3,6 +3,7 @@ set -e
 
 # Remember where we started so we can write absolute paths regardless of `cd`s below.
 ROOT_DIR="$(cd "$(dirname "$0")" && pwd)"
+DEV_MODE=1  # Set 1o 1 for development 0 for local production-like setup
 
 # Generate a random base64 secret using the alpine/openssl image.
 # Stderr is dropped because on Windows/Git Bash docker.exe can emit
@@ -126,17 +127,28 @@ fi
 
 echo "Starting Kheops..."
 cd "$ROOT_DIR/quantimage2-kheops"
-docker compose $composefiles up -d
+if [ "$DEV_MODE" = "1" ]; then
+  docker compose up -d
+else
+  docker compose $composefiles up -d
+fi
 
 echo "Starting Backend..."
 cd "$ROOT_DIR/quantimage2_backend"
-docker compose $composefiles build
-docker compose $composefiles up -d
+if [ "$DEV_MODE" = "1" ]; then
+  docker compose --profile dev build
+  docker compose --profile dev up -d
+else
+  docker compose $composefiles --profile dev build
+  docker compose $composefiles --profile dev up -d
+fi
 
-echo "Starting Frontend..."
-cd "$ROOT_DIR/quantimage2-frontend"
-docker compose $composefiles build
-docker compose $composefiles up -d
+if [ "$DEV_MODE" = "0" ]; then
+  echo "Starting Frontend..."
+  cd "$ROOT_DIR/quantimage2-frontend"
+  docker compose $composefiles build
+  docker compose $composefiles up -d
+fi
 
 echo "KHEOPS will be available at        : http://localhost"
 echo "QuantImage v2 will be available at : http://localhost:3000"
