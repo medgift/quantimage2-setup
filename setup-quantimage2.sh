@@ -89,9 +89,17 @@ generate_secrets "$secretpath" "${kheops_secretfiles[@]}"
 echo "Generating secrets for backend services (if necessary)"
 cd "$ROOT_DIR/quantimage2_backend"
 
+# Docker Desktop on Windows expects Windows-style host paths (e.g. C:/Users/...)
+# for bind mounts. Git Bash's `pwd` returns POSIX paths (e.g. /c/Users/...) which
+# Docker Desktop does not resolve correctly, so convert via cygpath when available.
+data_mount_dir="$ROOT_DIR/quantimage2-data"
+if command -v cygpath >/dev/null 2>&1; then
+  data_mount_dir="$(cygpath -m "$data_mount_dir")"
+fi
+
 {
   printf '%s\n' "# Docker volumes mount directory"
-  printf 'QUANTIMAGE2_DATA_MOUNT_DIRECTORY=%s\n' "$ROOT_DIR/quantimage2-data"
+  printf 'QUANTIMAGE2_DATA_MOUNT_DIRECTORY=%s\n' "$data_mount_dir"
 } > .env
 
 backend_secretfiles=("db_root_password" "db_user_password" "keycloak_db_user_password")
